@@ -1,21 +1,18 @@
 #TensorFlow vs. Theano vs. Torch
 In this study, I evaluate some popular deep learning frameworks. The candidates are listed in alphabet order: [TensorFlow](https://github.com/tensorflow/tensorflow), [Theano](https://github.com/Theano/Theano), and [Torch](https://github.com/torch/torch7). This is a dynamic document and the evaluation is based the current state of their code, not what the authors claim in white papers. 
 
-This evaluation is mostly technical and doesn't take into account the community size or who use what.
-
-If you find something wrong or incomplete, please help fix by creating an issue or sending pull requests.
+This evaluation is mostly technical, to the best of my knowledge, and doesn't take into account the community size or who use what. If you find something wrong or incomplete, please help fix by creating an issue or sending pull requests.
 
 ##TensorFlow
 <img src="http://www.androidcentral.com/sites/androidcentral.com/files/styles/large/public/article_images/2015/11/tensorflow.png" width="200">
 
 ###Strengths
 * Similar to Theano, TF allows specifying a symbolic graph of the network architecture via the Python interface. Since Theano pioneered the movement of symbolic graph and auto-gradient, I'll explain why this is great in Theano's section.
-* Quick deployment of model: trained models can be deployed easily on a variety of devices (servers or mobile devices) without the having to implement a separate model decoder or load Python/LuaJIT interpreter [1]. [Caffe](https://github.com/BVLC/caffe) also allows easy deployment of model. However, Caffe requires x86 CPU or CUDA-compatible GPU and most consumer phones don't have them. TF, on the other hand, supports model decoding using ARM/NEON instructions.
-* TensorBoard for visualization of the network architectures, which is very nice.
+* Quick deployment of model: trained models can be deployed easily on a variety of devices (servers or mobile devices) without the having to implement a separate model decoder or load Python/LuaJIT interpreter [1]. 
+* TensorBoard for visualization of the network architectures
 
 ###Weaknesses
 * TF performs much worse than its competitors, in both speed and memory usage, according to a [benchmark study by Soumith](https://github.com/soumith/convnet-benchmarks/issues/66). Note: Google is fixing these performance bugs. I'll update this remark accordingly when the issue is resolved.
-* Supported layers/operations don't seem as rich as Torch or Theano. In particular, there's no [temporal convolution (aka. convolution with dynamic input size)](https://github.com/torch/nn/blob/master/doc/convolution.md#nn.TemporalConvolution), which is important for modeling sentences in NLP [see [1](http://nal.co/papers/Kalchbrenner_DCNN_ACL14),[2](http://nal.co/papers/Kalchbrenner_DCNN_ACL14), [3](http://research.microsoft.com/pubs/214613/MSRTR2014_clsm_v16_full.pdf)]. Some suggested to [use conv2d to mimic temporal convolution](https://github.com/tensorflow/tensorflow/issues/166#issuecomment-156089093). It's unclear if TensorFlow's `conv2d` supports non-const input size. I'll update this when it gets clearer.
 
 ##Theano
 <img src="http://deeplearning.net/software/theano/_static/theano_logo_allblue_200x46.png" width="200">
@@ -26,7 +23,7 @@ Why symbolic? The reason is efficiency. For example, you can specify a layer as 
 
 **Other strengths**
 
-* Theano is more platformy than the other frameworks. There are several high-level toolkits that are built on top of Theano such as [Blocks](https://github.com/mila-udem/blocks), [Keras](https://github.com/fchollet/keras), etc. to make Theano easier to use for certain class of users (e.g. ones who are more familiar with the layerwise design of Caffe and Torch). [2.5]
+* Theano seems more platformy than the other frameworks. There are several high-level toolkits that are built on top of Theano such as [Blocks](https://github.com/mila-udem/blocks), [Keras](https://github.com/fchollet/keras), etc. to make Theano easier to use for certain class of users (e.g. ones who are more familiar with the layerwise design of Caffe and Torch).
 * Cross-platform: it works on Windows. Yikes!
 
 ###Weaknesses
@@ -53,4 +50,4 @@ ___
 
 [2] Any framework that uses the symbolic tensor flow graph model must have automatic differentiation. That's why I don't emphasize the auto-diff part.
 
-[3] To be fair, the comparison between layerwise design and tensor graph design is similar to the comparison between C# and C++. Both have their merits. However, for Theano and TensorFlow, it's fairly easy to add popular layer types as Python functions. Then, you would have both the flexibility of the native Theano and the convenience of Torch for those layers.
+[3] To be fair, the comparison between layerwise design and tensor graph design is similar to the comparison between C# and C++. Both have their merits. However, for Theano and TensorFlow, it's fairly easy to add popular layer types as simple Python functions. Then, you would have both the flexibility of the native Theano and the convenience of Torch for those layers.
